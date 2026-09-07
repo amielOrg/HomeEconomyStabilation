@@ -169,6 +169,7 @@ const DEFAULT_CATS: Category[] = [
   { id: 'tax',      name: 'מיסים',          kind: 'expense' },
   { id: 'judaism',  name: 'יהדות',          kind: 'expense' },
   { id: 'donations', name: 'תרומות',        kind: 'expense' },
+  { id: 'computing', name: 'מחשוב',          kind: 'expense' },
   { id: 'fees',     name: 'עמלות וריבית',   kind: 'expense' },
   { id: 'other',    name: 'אחר',            kind: 'expense' },
   { id: 'income',   name: 'הכנסות',         kind: 'income'  },
@@ -253,6 +254,23 @@ const DEFAULT_RULES = [
   ['ידידים', 'donations'], ['עזר מציון', 'donations'], ['יד שרה', 'donations'],
   ['זיכרון מנחם', 'donations'], ['פתחון לב', 'donations'], ['לקט ישראל', 'donations'],
   ['חסדי נעמי', 'donations'], ['זק"א', 'donations'], ['איחוד הצלה', 'donations'],
+  /* After the household and leisure blocks, both of which own wording this one would
+     otherwise take: בזק, הוט, סלקום and פרטנר sell internet as a household bill, and
+     נטפליקס and ספוטיפיי are an evening in, not a software licence. Before fees and
+     savings, which claim a standing order for a subscription first.
+
+     Names are spelled out rather than stemmed. 'אפל' is the opening of אפליקציה, and
+     'aws' sits inside "draws", so both are named the long way or not at all. */
+  ['מחשבים', 'computing'], ['תוכנה', 'computing'], ['תוכנות', 'computing'],
+  ['ksp', 'computing'], ['אייבורי', 'computing'], ['ivory', 'computing'],
+  ['מיקרוסופט', 'computing'], ['microsoft', 'computing'], ['אופיס 365', 'computing'], ['office 365', 'computing'],
+  ['גוגל', 'computing'], ['google', 'computing'], ['apple.com', 'computing'], ['app store', 'computing'],
+  ['itunes', 'computing'], ['אדובי', 'computing'], ['adobe', 'computing'],
+  ['openai', 'computing'], ['chatgpt', 'computing'], ['anthropic', 'computing'], ['claude.ai', 'computing'],
+  ['github', 'computing'], ['jetbrains', 'computing'], ['figma', 'computing'], ['canva', 'computing'],
+  ['dropbox', 'computing'], ['icloud', 'computing'], ['onedrive', 'computing'],
+  ['amazon web', 'computing'], ['digitalocean', 'computing'], ['cloudflare', 'computing'],
+  ['godaddy', 'computing'], ['wix', 'computing'], ['וויקס', 'computing'], ['דומיין', 'computing'],
   ['עמלה', 'fees'], ['עמלות', 'fees'], ['עמלת', 'fees'], ['דמי כרטיס', 'fees'], ['ריבית', 'fees'], ['דמי ניהול', 'fees'],
   ['העברה', 'savings'], ['הפקדה', 'savings'], ['חיסכון', 'savings'], ['קרן השתלמות', 'savings'],
   ['גמל', 'savings'], ['פיקדון', 'savings'], ['ניירות ערך', 'savings'],
