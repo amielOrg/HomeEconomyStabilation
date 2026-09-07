@@ -33,7 +33,7 @@ describe('savings and investments directory component', () => {
       'www.gov.il',
       'www.new.isa.gov.il',
     ]);
-    expect(links[6].hostname).toBe('www.hon.co.il');
+    expect(links[6].hostname).toBe('safe-arch-plan.base44.app');
     expect(links.slice(7, 10).map((link) => new URL(link.href).hostname)).toEqual([
       'www.paamonim.org',
       'mekimi.org.il',
@@ -79,9 +79,13 @@ describe('savings and investments directory component', () => {
   it('lists Dorit Gov Ari without presenting the requested entry as an endorsement', () => {
     const link = document.querySelector<HTMLAnchorElement>('[data-testid="advisor-dorit-gov-ari-link"]')!;
 
-    expect(link.href).toBe('https://www.hon.co.il/professional/%D7%92%D7%95%D7%91-%D7%90%D7%A8%D7%99-%D7%93%D7%95%D7%A8%D7%99%D7%AA/');
+    expect(link.href).toBe('https://safe-arch-plan.base44.app/#about');
     expect(link.textContent).toContain('דורית גוב ארי');
+    expect(link.textContent).toContain('יועצת פנסיונית ופיננסית');
     expect(link.textContent).toContain('אינה המלצה או אימות עצמאות');
+    /* The entry is here because someone asked for it, and the card has to keep saying so
+       next to the role — a described profession reads as vetting if nothing contradicts it. */
+    expect(link.textContent).toContain('נוסף לבקשת המשתמש');
   });
 
   it('opens every external destination safely in a new tab', () => {

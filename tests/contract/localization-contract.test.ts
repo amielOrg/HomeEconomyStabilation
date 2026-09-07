@@ -8,6 +8,10 @@ const readLocale = (locale: string) => JSON.parse(
   readFileSync(resolve(root, `resources/${locale}.json`), 'utf8'),
 ) as Record<string, unknown>;
 
+const decode = (value: string) => value
+  .replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"')
+  .replace(/&#39;/g, "'").replace(/&nbsp;/g, '\u00a0').replace(/&amp;/g, '&');
+
 describe('localization contract', () => {
   it('provides every canonical resource key in all supported locales', () => {
     const canonicalKeys = Object.keys(readLocale('he')).filter((key) => key !== 'replace').sort();
@@ -72,6 +76,50 @@ describe('localization contract', () => {
     expect(html).toContain('<option value="en">English</option>');
     expect(html).toContain('<option value="am">አማርኛ</option>');
     expect(html).toContain('<option value="fr">Français</option>');
+  });
+
+  /* The directory names a real person and links to their site. Whatever the card calls the
+     profession, every language has to carry the sentence that says a listing is not vetting
+     — a described role reads as endorsement if nothing next to it says otherwise. */
+  it('describes the listed advisor and refuses to imply an endorsement in every language', () => {
+    const role = {
+      he: 'יועצת פנסיונית ופיננסית', en: 'pension and financial advisor',
+      fr: 'conseillère en retraite et en finances', am: 'የጡረታና የፋይናንስ አማካሪ',
+    } as const;
+    const notAnEndorsement = {
+      he: 'אינה המלצה או אימות עצמאות', en: 'not a recommendation or verification of independence',
+      fr: 'ni une recommandation ni une vérification de son indépendance',
+      am: 'ምክር ወይም የገለልተኝነት ማረጋገጫ አይደለም',
+    } as const;
+
+    for (const locale of locales) {
+      const description = readLocale(locale).doritGovAriDescription;
+      expect(description, `${locale} is missing the advisor description`).toBeTypeOf('string');
+      expect(description as string, `${locale} does not name the role`).toContain(role[locale]);
+      expect(description as string, `${locale} dropped the disclaimer`).toContain(notAnEndorsement[locale]);
+    }
+  });
+
+  /* Hebrew copy lives twice: in he.json, and inline in the HTML as the text the page shows
+     before a locale is applied. An edit to one and not the other is invisible — the page
+     looks right the moment it is translated — so the two are pinned to each other here. */
+  it('keeps the Hebrew text in the page identical to the Hebrew resource', () => {
+    const html = readFileSync(resolve(root, 'mazan-habait.html'), 'utf8');
+    const hebrew = readLocale('he');
+    /* Two entries drifted before this test existed and are quarantined rather than
+       silently corrected: which side is right is a copy decision, not a test's to make. */
+    const knownDrift = ['importStep2', 'companiesNote'];
+
+    const drifted: string[] = [];
+    for (const match of html.matchAll(/<(\w+)[^>]*\bdata-i18n="([\w.]+)"[^>]*>([^<]*)<\/\1>/g)) {
+      const [, , key, text] = match;
+      const expected = hebrew[key!];
+      const actual = decode(text!).trim();
+      if (!actual || typeof expected !== 'string' || knownDrift.includes(key!)) continue;
+      if (actual !== expected.trim()) drifted.push(key!);
+    }
+
+    expect(drifted).toEqual([]);
   });
 
   it('keeps the household currency in ILS for every language', () => {
