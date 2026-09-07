@@ -166,6 +166,7 @@ const DEFAULT_CATS: Category[] = [
   { id: 'leisure',  name: 'פנאי ובידור',    kind: 'expense' },
   { id: 'education', name: 'לימודים וחינוך', kind: 'expense' },
   { id: 'clothing', name: 'ביגוד והנעלה',   kind: 'expense' },
+  { id: 'tax',      name: 'מיסים',          kind: 'expense' },
   { id: 'fees',     name: 'עמלות וריבית',   kind: 'expense' },
   { id: 'other',    name: 'אחר',            kind: 'expense' },
   { id: 'income',   name: 'הכנסות',         kind: 'income'  },
@@ -214,6 +215,17 @@ const DEFAULT_RULES = [
   ['דלתא', 'clothing'], ['שילב', 'clothing'], ['אדידס', 'clothing'], ['adidas', 'clothing'],
   ['נייקי', 'clothing'], ['nike', 'clothing'], ['נעלי', 'clothing'], ['הנעלה', 'clothing'],
   ['ביגוד', 'clothing'], ['אופנה', 'clothing'],
+  /* After the household and health blocks and before fees, savings and income. Each of
+     those five claims wording a tax line uses too: 'העברה' for a standing order to the
+     authority, 'שכר' for מס שכר, and 'ריבית' for the interest a late assessment adds.
+     Above stays what a household reads as something else first — ארנונה and עיריי are a
+     housing bill, and ביטוח לאומי is where an allowance arrives. No rule matches a bare
+     'מס': it is the opening of מסעדה, and a statement writes "מס'" for מספר. */
+  ['מס הכנסה', 'tax'], ['מקדמות מס', 'tax'], ['ניכוי מס', 'tax'], ['מס במקור', 'tax'],
+  ['פקיד שומה', 'tax'], ['מסים', 'tax'], ['מיסים', 'tax'],
+  ['מס ערך מוסף', 'tax'], ['מע"מ', 'tax'], ['מע\u05f4מ', 'tax'],
+  ['מס שבח', 'tax'], ['מס רכישה', 'tax'], ['מס רכוש', 'tax'], ['מיסוי מקרקעין', 'tax'],
+  ['מס שכר', 'tax'],
   ['עמלה', 'fees'], ['עמלות', 'fees'], ['עמלת', 'fees'], ['דמי כרטיס', 'fees'], ['ריבית', 'fees'], ['דמי ניהול', 'fees'], ['דמי כרטיס', 'fees'],
   ['העברה', 'savings'], ['הפקדה', 'savings'], ['חיסכון', 'savings'], ['קרן השתלמות', 'savings'],
   ['גמל', 'savings'], ['פיקדון', 'savings'], ['ניירות ערך', 'savings'],

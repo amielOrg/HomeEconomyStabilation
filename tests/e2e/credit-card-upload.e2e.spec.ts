@@ -298,6 +298,48 @@ test('offers studies and clothing as categories in every language', async ({ hom
   }
 });
 
+/* The tax lines a household actually meets, each sitting next to a rule that would have
+   claimed it: the authority is paid by transfer, מס שכר carries the salary wording, and a
+   late assessment adds interest. Arnona is the deliberate exception that stays housing. */
+test('separates tax payments from the transfers and bills they are worded like', async ({ homePage }) => {
+  await homePage.upload.uploadBankReport({
+    name: 'taxes.csv', mimeType: 'text/csv', buffer: Buffer.from([
+      'תאריך,תיאור פעולה,חובה,יתרה',
+      '03/09/2026,העברה לרשות המסים מקדמות מס,2400,9000',
+      '04/09/2026,מס הכנסה ניכוי במקור,1800,7200',
+      /* Quoted the way a real export writes it: the gershayim in מע"מ is a CSV quote too. */
+      '05/09/2026,"תשלום מע""מ דו-חודשי",3100,4100',
+      '06/09/2026,מס שכר,640,3460',
+      '07/09/2026,ארנונה עיריית חיפה,780,2680',
+      '08/09/2026,מסעדת הדגים,210,2470',
+    ].join('\n')),
+  });
+
+  await expect(homePage.dashboard.transactionCategories).toHaveCount(6);
+  const categoryOf = (merchant: string) => homePage.dashboard.transactionRows
+    .filter({ hasText: merchant }).getByTestId('transaction-category-select');
+
+  for (const merchant of ['רשות המסים', 'מס הכנסה', 'מע"מ', 'מס שכר']) {
+    await expect(categoryOf(merchant), `${merchant} is not tax`).toHaveValue('tax');
+  }
+  // Arnona is a housing bill before it is a municipal tax, and מס never opens a restaurant.
+  await expect(categoryOf('ארנונה')).toHaveValue('home');
+  await expect(categoryOf('מסעדת')).toHaveValue('leisure');
+});
+
+test('offers taxes as a category in every language', async ({ homePage }) => {
+  await homePage.upload.uploadSampleBankReport();
+  const picker = homePage.dashboard.transactionCategories.first();
+
+  const names = [['he', 'מיסים'], ['en', 'Taxes'], ['fr', 'Impôts']] as const;
+
+  for (const [locale, tax] of names) {
+    await homePage.language.choose(locale);
+    await expect(homePage.html).toHaveAttribute('lang', locale);
+    await expect(picker.locator('option[value="tax"]')).toHaveText(tax);
+  }
+});
+
 test('offers leisure as a category in every language', async ({ homePage }) => {
   await homePage.upload.uploadSampleBankReport();
   const picker = homePage.dashboard.transactionCategories.first();
