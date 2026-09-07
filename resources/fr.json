@@ -475,5 +475,18 @@
   "chartAsTable": "Afficher les données en tableau",
   "waterlineTableSummary": "Revenus et dépenses par mois, en tableau",
   "forecastTableSummary": "Solde projeté par semaine, en tableau",
-  "month": "Mois"
+  "month": "Mois",
+  "transactionSource": "Source",
+  "cardIssuerLabel": "Quelle société a émis la carte ?",
+  "sourceBank": "Banque",
+  "sourceCardUnknown": "Carte de crédit",
+  "sourceManualEntry": "Saisie manuelle",
+  "cardBrand.visa": "Visa",
+  "cardBrand.cal": "Cal",
+  "cardBrand.isracard": "Isracard",
+  "cardBrand.max": "Max",
+  "cardBrand.leumi": "Leumi Card",
+  "cardBrand.diners": "Diners",
+  "cardBrand.amex": "American Express",
+  "cardBrand.other": "Autre / inconnu"
 }
