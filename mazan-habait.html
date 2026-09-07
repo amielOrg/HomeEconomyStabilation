@@ -1241,5 +1241,11 @@ body.drawer-open{ overflow:hidden; }
 <div class="toast" id="toast" role="status" aria-live="polite" data-testid="toast"></div>
 
 <script type="module" src="dist/app.js"></script>
+<!-- Vercel Speed Insights. Served and beaconed from this site's own origin, so the
+     script-src 'self' and connect-src 'self' policy in vercel.json covers it without
+     an exception, and no third-party host is contacted. Real-user performance only:
+     it never sees a transaction, an amount or a category, all of which stay in the
+     browser. Inert unless Speed Insights is enabled for the project. -->
+<script defer src="/_vercel/speed-insights/script.js"></script>
 </body>
 </html>
