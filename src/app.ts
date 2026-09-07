@@ -164,6 +164,8 @@ const DEFAULT_CATS: Category[] = [
      categories carry the chart's validated hues, and moving an existing one out of that
      range would repaint a customer's chart for a category they did not change. */
   { id: 'leisure',  name: 'פנאי ובידור',    kind: 'expense' },
+  { id: 'education', name: 'לימודים וחינוך', kind: 'expense' },
+  { id: 'clothing', name: 'ביגוד והנעלה',   kind: 'expense' },
   { id: 'fees',     name: 'עמלות וריבית',   kind: 'expense' },
   { id: 'other',    name: 'אחר',            kind: 'expense' },
   { id: 'income',   name: 'הכנסות',         kind: 'income'  },
@@ -198,6 +200,20 @@ const DEFAULT_RULES = [
   ['חדר כושר', 'leisure'], ['הולמס פלייס', 'leisure'], ['גולד ג', 'leisure'], ['אנרג\'י', 'leisure'],
   ['מסעד', 'leisure'], ['בית קפה', 'leisure'], ['קפה', 'leisure'], ['פאב', 'leisure'],
   ['סטימצקי', 'leisure'], ['צומת ספרים', 'leisure'],
+  /* Both blocks sit after leisure and before fees, savings and income, all three of
+     which match on wording a household bill uses too: a tuition standing order reads as
+     'העברה', and 'שכר לימוד' is not a salary. The household block above keeps עיריי —
+     a municipality charge is arnona before it is a kindergarten. */
+  ['אוניברסיט', 'education'], ['מכללה', 'education'], ['מכללת', 'education'], ['טכניון', 'education'],
+  ['לימוד', 'education'], ['בית ספר', 'education'], ['ביה"ס', 'education'], ['משרד החינוך', 'education'],
+  ['גן ילדים', 'education'], ['גנון', 'education'], ['מעון', 'education'], ['צהרון', 'education'],
+  ['קורס', 'education'], ['סדנ', 'education'], ['חוג ', 'education'], ['חוגים', 'education'], ['סמינר', 'education'],
+  ['קסטרו', 'clothing'], ['פוקס', 'clothing'], ['רנואר', 'clothing'], ['גולף', 'clothing'],
+  ['טרמינל איקס', 'clothing'], ['אמריקן איגל', 'clothing'], ['הוניגמן', 'clothing'], ['אורבניקה', 'clothing'],
+  ['זארה', 'clothing'], ['zara', 'clothing'], ['h&m', 'clothing'], ['פול אנד בר', 'clothing'],
+  ['דלתא', 'clothing'], ['שילב', 'clothing'], ['אדידס', 'clothing'], ['adidas', 'clothing'],
+  ['נייקי', 'clothing'], ['nike', 'clothing'], ['נעלי', 'clothing'], ['הנעלה', 'clothing'],
+  ['ביגוד', 'clothing'], ['אופנה', 'clothing'],
   ['עמלה', 'fees'], ['עמלות', 'fees'], ['עמלת', 'fees'], ['דמי כרטיס', 'fees'], ['ריבית', 'fees'], ['דמי ניהול', 'fees'], ['דמי כרטיס', 'fees'],
   ['העברה', 'savings'], ['הפקדה', 'savings'], ['חיסכון', 'savings'], ['קרן השתלמות', 'savings'],
   ['גמל', 'savings'], ['פיקדון', 'savings'], ['ניירות ערך', 'savings'],

@@ -79,22 +79,27 @@ describe('application state boundary', () => {
      row, and the dashboard comes back empty after a reload. */
   /* The same guarantee the loans category needed: a category added to the defaults has to
      reach customers who saved before it existed, and at its own position, or their chart
-     repaints for a category they never touched. */
-  it('returns the leisure category to a customer who saved before it existed', () => {
-    const withLeisure = {
+     repaints for a category they never touched. Leisure, studies and clothing were each
+     added after customers had already saved, and consecutively — so the run of them has to
+     come back in order, not appended wherever the merge happened to notice them. */
+  it('returns categories added after a save at their own positions', () => {
+    const withAdditions = {
       rules: defaults.rules,
       cats: [
         { id: 'loans', name: 'הלוואות', kind: 'expense' as const },
         { id: 'leisure', name: 'פנאי ובידור', kind: 'expense' as const },
+        { id: 'education', name: 'לימודים וחינוך', kind: 'expense' as const },
+        { id: 'clothing', name: 'ביגוד והנעלה', kind: 'expense' as const },
         { id: 'fees', name: 'עמלות וריבית', kind: 'expense' as const },
       ],
     };
-    const saved = [withLeisure.cats[0], withLeisure.cats[2]];
+    const saved = [withAdditions.cats[0], withAdditions.cats[4]];
 
-    const restored = new AppStateCodec(withLeisure)
+    const restored = new AppStateCodec(withAdditions)
       .decode({ tx: [transaction], overrides: {}, rules: [], cats: saved, budgets: {} });
 
-    expect(restored?.cats.map((category) => category.id)).toEqual(['loans', 'leisure', 'fees']);
+    expect(restored?.cats.map((category) => category.id))
+      .toEqual(['loans', 'leisure', 'education', 'clothing', 'fees']);
   });
 
   it('keeps a transaction that names its card issuer', () => {

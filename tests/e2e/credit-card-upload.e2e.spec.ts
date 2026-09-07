@@ -250,6 +250,54 @@ test('separates leisure spending from the household bills it arrives beside', as
   await expect(categoryOf('הוט')).toHaveValue('home');
 });
 
+/* Studies and clothing are the two lines a household plans for a year ahead and then meets
+   monthly, and both used to land in "other" beside everything nobody had a rule for. The
+   ordering carries as much as the rules: "שכר לימוד" would read as a salary against the
+   income rule, and a school charged by the municipality would read as arnona. */
+test('separates studies and clothing from the salary and the shops they arrive beside', async ({ homePage }) => {
+  await homePage.upload.uploadBankReport({
+    name: 'studies-and-clothing.csv', mimeType: 'text/csv', buffer: Buffer.from([
+      'תאריך,תיאור פעולה,חובה,יתרה',
+      '03/09/2026,אוניברסיטת תל אביב שכר לימוד,3200,9000',
+      '04/09/2026,צהרון גן רימון,850,8150',
+      '05/09/2026,קסטרו דיזנגוף סנטר,320,7830',
+      '06/09/2026,נעלי גלי,240,7590',
+      '07/09/2026,שופרסל דיל,410,7180',
+    ].join('\n')),
+  });
+
+  await expect(homePage.dashboard.transactionCategories).toHaveCount(5);
+  const categoryOf = (merchant: string) => homePage.dashboard.transactionRows
+    .filter({ hasText: merchant }).getByTestId('transaction-category-select');
+
+  // Tuition is an expense, not the salary the wording would otherwise match.
+  await expect(categoryOf('אוניברסיטת תל אביב')).toHaveValue('education');
+  await expect(categoryOf('צהרון')).toHaveValue('education');
+  for (const merchant of ['קסטרו', 'נעלי גלי']) {
+    await expect(categoryOf(merchant), `${merchant} is not clothing`).toHaveValue('clothing');
+  }
+  // The weekly shop stays where the household budgets for it.
+  await expect(categoryOf('שופרסל')).toHaveValue('food');
+});
+
+test('offers studies and clothing as categories in every language', async ({ homePage }) => {
+  await homePage.upload.uploadSampleBankReport();
+  const picker = homePage.dashboard.transactionCategories.first();
+
+  const names = [
+    ['he', 'לימודים וחינוך', 'ביגוד והנעלה'],
+    ['en', 'Education & schooling', 'Clothing & footwear'],
+    ['fr', 'Études et scolarité', 'Vêtements et chaussures'],
+  ] as const;
+
+  for (const [locale, education, clothing] of names) {
+    await homePage.language.choose(locale);
+    await expect(homePage.html).toHaveAttribute('lang', locale);
+    await expect(picker.locator('option[value="education"]')).toHaveText(education);
+    await expect(picker.locator('option[value="clothing"]')).toHaveText(clothing);
+  }
+});
+
 test('offers leisure as a category in every language', async ({ homePage }) => {
   await homePage.upload.uploadSampleBankReport();
   const picker = homePage.dashboard.transactionCategories.first();
