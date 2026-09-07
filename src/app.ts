@@ -168,6 +168,7 @@ const DEFAULT_CATS: Category[] = [
   { id: 'clothing', name: 'ביגוד והנעלה',   kind: 'expense' },
   { id: 'tax',      name: 'מיסים',          kind: 'expense' },
   { id: 'judaism',  name: 'יהדות',          kind: 'expense' },
+  { id: 'donations', name: 'תרומות',        kind: 'expense' },
   { id: 'fees',     name: 'עמלות וריבית',   kind: 'expense' },
   { id: 'other',    name: 'אחר',            kind: 'expense' },
   { id: 'income',   name: 'הכנסות',         kind: 'income'  },
@@ -240,8 +241,18 @@ const DEFAULT_RULES = [
   ['תשמישי קדושה', 'judaism'], ['ספרי קודש', 'judaism'], ['תפילין', 'judaism'],
   ['מזוזה', 'judaism'], ['מזוזות', 'judaism'], ['טלית', 'judaism'], ['ציצית', 'judaism'],
   ['לולב', 'judaism'], ['אתרוג', 'judaism'], ['ארבעת המינים', 'judaism'],
-  ['צדקה', 'judaism'], ['מעשר', 'judaism'], ['גמ"ח', 'judaism'],
   ['ישיבת', 'judaism'], ['כולל אברכים', 'judaism'], ['מדרשה', 'judaism'], ['חב"ד', 'judaism'],
+  /* Before savings and income, which claim the wording a standing order to a charity
+     uses: 'העברה' for the order itself. Tzedakah and maaser sit here rather than with
+     Jewish life — a household decides what it gives as one line, whoever it gives to.
+     No rule matches a bare 'קרן': 'קרן השתלמות' is savings, and 'לתת' is skipped for
+     being three letters that are also an ordinary verb. */
+  ['תרומה', 'donations'], ['תרומות', 'donations'], ['תרומת', 'donations'],
+  ['צדקה', 'donations'], ['מעשר', 'donations'], ['גמ"ח', 'donations'],
+  ['עמותה', 'donations'], ['עמותת', 'donations'],
+  ['ידידים', 'donations'], ['עזר מציון', 'donations'], ['יד שרה', 'donations'],
+  ['זיכרון מנחם', 'donations'], ['פתחון לב', 'donations'], ['לקט ישראל', 'donations'],
+  ['חסדי נעמי', 'donations'], ['זק"א', 'donations'], ['איחוד הצלה', 'donations'],
   ['עמלה', 'fees'], ['עמלות', 'fees'], ['עמלת', 'fees'], ['דמי כרטיס', 'fees'], ['ריבית', 'fees'], ['דמי ניהול', 'fees'],
   ['העברה', 'savings'], ['הפקדה', 'savings'], ['חיסכון', 'savings'], ['קרן השתלמות', 'savings'],
   ['גמל', 'savings'], ['פיקדון', 'savings'], ['ניירות ערך', 'savings'],
