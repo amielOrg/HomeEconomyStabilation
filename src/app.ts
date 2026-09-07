@@ -167,6 +167,7 @@ const DEFAULT_CATS: Category[] = [
   { id: 'education', name: 'לימודים וחינוך', kind: 'expense' },
   { id: 'clothing', name: 'ביגוד והנעלה',   kind: 'expense' },
   { id: 'tax',      name: 'מיסים',          kind: 'expense' },
+  { id: 'judaism',  name: 'יהדות',          kind: 'expense' },
   { id: 'fees',     name: 'עמלות וריבית',   kind: 'expense' },
   { id: 'other',    name: 'אחר',            kind: 'expense' },
   { id: 'income',   name: 'הכנסות',         kind: 'income'  },
@@ -230,6 +231,17 @@ const DEFAULT_RULES = [
   ['מס ערך מוסף', 'tax'], ['מע"מ', 'tax'], ['מע\u05f4מ', 'tax'],
   ['מס שבח', 'tax'], ['מס רכישה', 'tax'], ['מס רכוש', 'tax'], ['מיסוי מקרקעין', 'tax'],
   ['מס שכר', 'tax'],
+  /* After education, which keeps a yeshiva's tuition where a household budgets for
+     studies, and after the household block, which keeps a municipal charge as arnona.
+     No rule matches a bare 'כולל': a statement writes it for "including", as in
+     כולל מע"מ, and it would claim half the file. */
+  ['בית כנסת', 'judaism'], ['בית הכנסת', 'judaism'], ['בית מדרש', 'judaism'],
+  ['מקווה', 'judaism'], ['מקוה', 'judaism'], ['רבנות', 'judaism'], ['כשרות', 'judaism'], ['בד"ץ', 'judaism'],
+  ['תשמישי קדושה', 'judaism'], ['ספרי קודש', 'judaism'], ['תפילין', 'judaism'],
+  ['מזוזה', 'judaism'], ['מזוזות', 'judaism'], ['טלית', 'judaism'], ['ציצית', 'judaism'],
+  ['לולב', 'judaism'], ['אתרוג', 'judaism'], ['ארבעת המינים', 'judaism'],
+  ['צדקה', 'judaism'], ['מעשר', 'judaism'], ['גמ"ח', 'judaism'],
+  ['ישיבת', 'judaism'], ['כולל אברכים', 'judaism'], ['מדרשה', 'judaism'], ['חב"ד', 'judaism'],
   ['עמלה', 'fees'], ['עמלות', 'fees'], ['עמלת', 'fees'], ['דמי כרטיס', 'fees'], ['ריבית', 'fees'], ['דמי ניהול', 'fees'],
   ['העברה', 'savings'], ['הפקדה', 'savings'], ['חיסכון', 'savings'], ['קרן השתלמות', 'savings'],
   ['גמל', 'savings'], ['פיקדון', 'savings'], ['ניירות ערך', 'savings'],
