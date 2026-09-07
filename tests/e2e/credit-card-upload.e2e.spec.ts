@@ -340,6 +340,45 @@ test('offers taxes as a category in every language', async ({ homePage }) => {
   }
 });
 
+/* A yeshiva's tuition is studies before it is religion, and a municipal charge is arnona
+   before either, so both blocks stay above this one. */
+test('separates Jewish life from the studies and bills it is worded like', async ({ homePage }) => {
+  await homePage.upload.uploadBankReport({
+    name: 'judaism.csv', mimeType: 'text/csv', buffer: Buffer.from([
+      'תאריך,תיאור פעולה,חובה,יתרה',
+      '03/09/2026,בית כנסת אהל יעקב דמי חבר,180,9000',
+      '04/09/2026,תשמישי קדושה בני ברק,260,8740',
+      '05/09/2026,תרומה צדקה קמחא דפסחא,300,8440',
+      '06/09/2026,מקווה נשים,45,8395',
+      '07/09/2026,אוניברסיטת תל אביב שכר לימוד,3200,5195',
+      '08/09/2026,ארנונה עיריית חיפה,780,4415',
+    ].join('\n')),
+  });
+
+  await expect(homePage.dashboard.transactionCategories).toHaveCount(6);
+  const categoryOf = (merchant: string) => homePage.dashboard.transactionRows
+    .filter({ hasText: merchant }).getByTestId('transaction-category-select');
+
+  for (const merchant of ['בית כנסת', 'תשמישי קדושה', 'צדקה', 'מקווה']) {
+    await expect(categoryOf(merchant), `${merchant} is not judaism`).toHaveValue('judaism');
+  }
+  await expect(categoryOf('אוניברסיטת')).toHaveValue('education');
+  await expect(categoryOf('ארנונה')).toHaveValue('home');
+});
+
+test('offers Jewish life as a category in every language', async ({ homePage }) => {
+  await homePage.upload.uploadSampleBankReport();
+  const picker = homePage.dashboard.transactionCategories.first();
+
+  const names = [['he', 'יהדות'], ['en', 'Judaism'], ['fr', 'Judaïsme']] as const;
+
+  for (const [locale, judaism] of names) {
+    await homePage.language.choose(locale);
+    await expect(homePage.html).toHaveAttribute('lang', locale);
+    await expect(picker.locator('option[value="judaism"]')).toHaveText(judaism);
+  }
+});
+
 test('offers leisure as a category in every language', async ({ homePage }) => {
   await homePage.upload.uploadSampleBankReport();
   const picker = homePage.dashboard.transactionCategories.first();
