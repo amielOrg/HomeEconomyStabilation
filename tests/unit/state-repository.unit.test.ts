@@ -119,6 +119,19 @@ describe('application state boundary', () => {
       .toEqual(['loans', 'leisure', 'education', 'clothing', 'tax', 'judaism', 'donations', 'fees']);
   });
 
+  /* The brand is provenance the customer typed once, and the key check is strict: a value
+     it does not allow does not drop the brand, it returns null and empties the dashboard. */
+  it('keeps the card brand a row was imported with, and rejects one it does not know', () => {
+    const codec = new AppStateCodec(defaults);
+    const card = { ...transaction, source: 'card' as const, cardKind: 'external' as const, cardBrand: 'isracard' as const };
+    const state = { overrides: {}, rules: [], cats: defaults.cats, budgets: {} };
+
+    expect(codec.decode({ ...state, tx: [card] })?.tx[0]).toMatchObject({ cardBrand: 'isracard' });
+    // A row imported before the question existed keeps no brand rather than gaining one.
+    expect(codec.decode({ ...state, tx: [transaction] })?.tx[0]).not.toHaveProperty('cardBrand');
+    expect(codec.decode({ ...state, tx: [{ ...card, cardBrand: 'mastercard' }] })).toBeNull();
+  });
+
   it('keeps a transaction that names its card issuer', () => {
     const codec = new AppStateCodec(defaults);
     const restored = codec.decode({
