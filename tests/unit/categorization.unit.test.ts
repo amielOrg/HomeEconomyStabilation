@@ -30,4 +30,26 @@ describe('rule-based transaction categorization', () => {
     const item = transaction('מזונות');
     expect(categorizer.categorize(item, { [item.id!]: 'other' }, rules)).toBe('other');
   });
+
+  /* The same wording arrives and leaves: ביטוח לאומי pays an allowance in and collects a
+     contribution out. A rule that names a direction must decline the other one and let a
+     later rule answer, rather than filing a payment as income. */
+  describe('a rule that names a direction', () => {
+    const directed: Rule[] = [
+      { id: 'allowance', match: 'ביטוח לאומי', cat: 'income', when: 'in' },
+      { id: 'insurance', match: 'ביטוח', cat: 'health' },
+    ];
+
+    it('claims the direction it names', () => {
+      expect(categorizer.categorize(transaction('ביטוח לאומי קצבת ילדים', 450), {}, directed)).toBe('income');
+    });
+
+    it('declines the other direction and leaves it to the next rule', () => {
+      expect(categorizer.categorize(transaction('ביטוח לאומי מקדמה'), {}, directed)).toBe('health');
+    });
+
+    it('does not shadow an undirected rule that would have matched', () => {
+      expect(categorizer.categorize(transaction('ביטוח בריאות פרטי'), {}, directed)).toBe('health');
+    });
+  });
 });

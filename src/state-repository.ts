@@ -64,10 +64,12 @@ function parseRules(value: unknown): Rule[] | null {
   if (!Array.isArray(value) || value.length > MAX_RULES) return null;
   const rules: Rule[] = [];
   for (const item of value) {
-    if (!isRecord(item) || !hasOnlyKeys(item, ['id', 'match', 'cat'])
+    if (!isRecord(item) || !hasOnlyKeys(item, ['id', 'match', 'cat', 'when'])
         || !isBoundedString(item.id, 100) || !isBoundedString(item.match, 200)
-        || !isBoundedString(item.cat, 100)) return null;
-    rules.push({ id: item.id, match: item.match, cat: item.cat });
+        || !isBoundedString(item.cat, 100)
+        || (item.when !== undefined && item.when !== 'in' && item.when !== 'out')) return null;
+    rules.push({ id: item.id, match: item.match, cat: item.cat,
+      ...(item.when ? { when: item.when as 'in' | 'out' } : {}) });
   }
   return rules;
 }

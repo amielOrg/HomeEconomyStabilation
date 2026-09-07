@@ -21,6 +21,20 @@ describe('application state boundary', () => {
     expect(restored?.accounts).toEqual([]);
   });
 
+  /* A rule carrying a direction is the one shape the strict key check had never seen. If
+     'when' is not allowed through, the saved state does not lose the field — parseRules
+     returns null and the customer's whole dashboard comes back empty after a reload. */
+  it('keeps the direction a saved rule was written with, and rejects a direction it was not', () => {
+    const directed = { id: 'allowance', match: 'ביטוח לאומי', cat: 'income', when: 'in' as const };
+    const codec = new AppStateCodec({ rules: [...defaults.rules, directed], cats: defaults.cats });
+    const state = { tx: [transaction], overrides: {}, cats: defaults.cats, budgets: {} };
+
+    expect(codec.decode({ ...state, rules: [directed] })?.rules).toContainEqual(directed);
+    // An undirected rule keeps no 'when' at all rather than gaining an undefined one.
+    expect(codec.decode({ ...state, rules: [] })?.rules).toContainEqual(defaults.rules[0]);
+    expect(codec.decode({ ...state, rules: [{ ...directed, when: 'sideways' }] })).toBeNull();
+  });
+
   /* Categories are restored wholesale where rules are merged, so a category added
      to the defaults after a customer last saved would never have reached them —
      the loans category would have been invisible to every existing customer. */

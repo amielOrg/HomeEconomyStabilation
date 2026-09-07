@@ -36,6 +36,10 @@ export interface Rule {
   id: string;
   match: string;
   cat: string;
+  /* Which direction the rule reads, when the same wording means opposite things on the
+     two sides of a statement — 'ביטוח לאומי' is an allowance arriving and a contribution
+     leaving. Omitted on nearly every rule, and an omitted `when` matches both. */
+  when?: 'in' | 'out';
 }
 
 export interface AppState {

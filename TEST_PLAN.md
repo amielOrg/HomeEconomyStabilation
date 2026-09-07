@@ -58,10 +58,10 @@ The shared POSIX runner tracks all three child process IDs, waits for every exit
 | `tests/unit/localization.unit.test.ts` | Supported locale validation, RTL/LTR, UTC formatting and named parameters |
 | `tests/unit/credit-card-importer.unit.test.ts` | Charges, refunds, headings with the definite article, billed versus transaction amounts, metadata rows above the heading, multi-sheet cards, pending sheets and invalid workbook rows |
 | `tests/unit/bank-importer.unit.test.ts` | Hebrew and English bank headers, account extraction, card-source signed amounts, transaction normalization and stable IDs |
-| `tests/unit/categorization.unit.test.ts` | Transfer/alimony classification, unknown fallbacks, income and manual-override precedence |
+| `tests/unit/categorization.unit.test.ts` | Transfer/alimony classification, unknown fallbacks, income and manual-override precedence, and a direction-scoped rule claiming only the side it names |
 | `tests/unit/marketing.unit.test.ts` | Allowed attribution, first/last touch and bounded local event history |
 | `tests/unit/privacy.unit.test.ts` | Identifier redaction, allowlisted snapshots and removal/rejection of unknown sensitive properties |
-| `tests/unit/state-repository.unit.test.ts` | Runtime state validation, safe migration, default-rule merge, newly added default categories returning at their own position, card-issuer round trip, prototype-key refusal and persistence round-trip |
+| `tests/unit/state-repository.unit.test.ts` | Runtime state validation, safe migration, default-rule merge, newly added default categories returning at their own position, card-issuer round trip, a saved rule keeping the direction it was written with, prototype-key refusal and persistence round-trip |
 | `tests/unit/cloud-sync.unit.test.ts` | Privacy-safe schema-v2 validation, signed-out behavior, auth headers, failures, timeout and DELETE |
 | `tests/unit/cloud-metadata.unit.test.ts` | Authenticated Supabase profile/consent reads and writes, response validation, safe auth headers and withdrawal |
 | `tests/unit/consent.unit.test.ts` | Versioned consent, malformed records and withdrawal |
@@ -103,6 +103,7 @@ The shared POSIX runner tracks all three child process IDs, waits for every exit
 | `tests/contract/design-system-contract.test.ts` | Semantic tokens, recipe ownership, variants, disabled/focus states, contrast preferences, touch targets, typography and directional drawers |
 | `tests/contract/discovery.contract.test.ts` | Assistant-crawler allowlist, canonical URL and duplicate suppression, sitemap and llms.txt link resolution, structured-data graph integrity, IndexNow key ownership, variable-font face declarations and deployment of every discovery file |
 | `tests/contract/documentation-contract.test.ts` | README, architecture, design system, privacy, Supabase, TODO, monitoring and this test plan stay synchronized |
+| `tests/contract/default-rules.contract.test.ts` | No default rule left unreachable behind an earlier rule of another category, no exact duplicates, and the national-insurance allowance filed as income rather than as an insurance expense |
 | `tests/contract/control-labels.contract.test.ts` | Header action labels present, distinguishable and short enough to fit in every locale, and every data-i18n and translated aria-label key resolving |
 | `tests/contract/importer-contract.test.ts` | Dashboard transaction shape, dense rows and legal cell typing from every reader, stable and distinct transaction IDs, and resolvable import messages |
 | `tests/contract/responsive-layout.contract.test.ts` | Narrow-width header rules declared after the wider rules they override, shrinkable grid tracks, constrained overflow for nowrap actions, wrapping instead of truncation at the narrowest width, no pinned control widths and pinned text sizing |

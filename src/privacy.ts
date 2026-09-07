@@ -79,7 +79,8 @@ export function createPrivacySafeSnapshot<T extends PersistableTransaction>(stat
   return {
     tx: state.tx.map(sanitizeTransaction),
     overrides: { ...state.overrides },
-    rules: state.rules.map((rule) => ({ id: rule.id, match: rule.match, cat: rule.cat })),
+    rules: state.rules.map((rule) =>
+      ({ id: rule.id, match: rule.match, cat: rule.cat, ...(rule.when ? { when: rule.when } : {}) })),
     cats: state.cats.map((category) => ({ id: category.id, name: category.name, kind: category.kind })),
     budgets: { ...state.budgets },
   };
@@ -118,8 +119,9 @@ export function isPrivacySafeSnapshot(value: unknown): value is PrivacySafeSnaps
   if (!isRecord(value.overrides) || Object.keys(value.overrides).length > 50_000
       || !Object.entries(value.overrides).every(([key, item]) => safeKey(key, 200) && isShortString(item, 200))) return false;
   if (!Array.isArray(value.rules) || value.rules.length > 1_000 || !value.rules.every((item) =>
-    isRecord(item) && onlyKeys(item, ['id', 'match', 'cat'])
-    && isShortString(item.id, 100) && isShortString(item.match, 200) && isShortString(item.cat, 100))) return false;
+    isRecord(item) && onlyKeys(item, ['id', 'match', 'cat', 'when'])
+    && isShortString(item.id, 100) && isShortString(item.match, 200) && isShortString(item.cat, 100)
+    && (item.when === undefined || item.when === 'in' || item.when === 'out'))) return false;
   if (!Array.isArray(value.cats) || value.cats.length > 1_000 || !value.cats.every((item) =>
     isRecord(item) && onlyKeys(item, ['id', 'name', 'kind'])
     && isShortString(item.id, 100) && isShortString(item.name, 200)
