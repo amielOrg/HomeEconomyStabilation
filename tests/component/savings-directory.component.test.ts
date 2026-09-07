@@ -81,7 +81,11 @@ describe('savings and investments directory component', () => {
 
     expect(link.href).toBe('https://safe-arch-plan.base44.app/#about');
     expect(link.textContent).toContain('דורית גוב ארי');
+    expect(link.textContent).toContain('יועצת פנסיונית ופיננסית');
     expect(link.textContent).toContain('אינה המלצה או אימות עצמאות');
+    /* The entry is here because someone asked for it, and the card has to keep saying so
+       next to the role — a described profession reads as vetting if nothing contradicts it. */
+    expect(link.textContent).toContain('נוסף לבקשת המשתמש');
   });
 
   it('opens every external destination safely in a new tab', () => {

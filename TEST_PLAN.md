@@ -107,7 +107,7 @@ The shared POSIX runner tracks all three child process IDs, waits for every exit
 | `tests/contract/importer-contract.test.ts` | Dashboard transaction shape, dense rows and legal cell typing from every reader, stable and distinct transaction IDs, and resolvable import messages |
 | `tests/contract/responsive-layout.contract.test.ts` | Narrow-width header rules declared after the wider rules they override, shrinkable grid tracks, constrained overflow for nowrap actions, wrapping instead of truncation at the narrowest width, no pinned control widths and pinned text sizing |
 | `tests/contract/logging-contract.test.ts` | Browser and API agreeing on record fields, level names, origin field, one-line records, bounded retention on both sides and runtime level configuration |
-| `tests/contract/localization-contract.test.ts` | Key parity, named-parameter parity and complete HTML/runtime translation coverage |
+| `tests/contract/localization-contract.test.ts` | Key parity, named-parameter parity, complete HTML/runtime translation coverage, the listed advisor's role and non-endorsement disclaimer surviving in every language, and the page's Hebrew copy staying identical to the Hebrew resource |
 | `tests/contract/monitoring.contract.test.ts` | Prometheus, bounded route labels, application/database Grafana dashboards, profile/consent/snapshot panels, privacy-safe Supabase metrics and combined Allure publication |
 | `tests/contract/openapi.contract.test.ts` | Snapshot, profile and consent operations, privacy-minimised schema v2, bearer security, responses and self-hosted Swagger/Scalar |
 | `tests/contract/security-sanity.contract.test.ts` | Dangerous sinks, HTTPS opener isolation, file types and remote scripts |
@@ -126,7 +126,7 @@ The shared POSIX runner tracks all three child process IDs, waits for every exit
 | `tests/component/financial-agents.component.test.ts` | Accessible eight-agent host and prominent safe-to-spend result |
 | `tests/component/language-picker.component.test.ts` | Native language names, accessible field and keyboard semantics |
 | `tests/component/marketing-landing.component.test.ts` | Conversion path, concrete benefits, privacy and claim discipline |
-| `tests/component/savings-directory.component.test.ts` | Official tools and adviser registries, independence checks, Paamonim, Mekimi, commercial providers and safe links |
+| `tests/component/savings-directory.component.test.ts` | Official tools and adviser registries, independence checks, the requested advisor listing carrying its role and its not-an-endorsement notice, Paamonim, Mekimi, commercial providers and safe links |
 | `tests/component/settings-drawer.component.test.ts` | Modal semantics, initial inert state and four collapsible settings groups |
 
 ## End-to-end and sanity suites
