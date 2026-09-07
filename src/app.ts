@@ -191,6 +191,10 @@ const DEFAULT_RULES = [
   ['רב קו', 'transit'], ['רב-קו', 'transit'], ['פנגו', 'transit'], ['סלופארק', 'transit'],
   ['חניון', 'transit'], ['רכבת', 'transit'], ['אגד', 'transit'],
   ['מכבי', 'health'], ['כללית', 'health'], ['מאוחדת', 'health'], ['לאומית שר', 'health'],
+  /* Ahead of 'ביטוח', which reads the whole name and would otherwise file an allowance as
+     an insurance expense. Only the arriving side is claimed: the same wording leaves the
+     account when someone self-employed pays the contribution, and that is not income. */
+  ['ביטוח לאומי', 'income', 'in'],
   ['ביטוח', 'health'], ['הראל', 'health'], ['מגדל', 'health'], ['מנורה', 'health'], ['הפניקס', 'health'],
   /* After the household block on purpose: הוט and בזק sell television alongside the line
      the household actually pays for, and a bill is not an evening out. Before fees and
@@ -226,13 +230,14 @@ const DEFAULT_RULES = [
   ['מס ערך מוסף', 'tax'], ['מע"מ', 'tax'], ['מע\u05f4מ', 'tax'],
   ['מס שבח', 'tax'], ['מס רכישה', 'tax'], ['מס רכוש', 'tax'], ['מיסוי מקרקעין', 'tax'],
   ['מס שכר', 'tax'],
-  ['עמלה', 'fees'], ['עמלות', 'fees'], ['עמלת', 'fees'], ['דמי כרטיס', 'fees'], ['ריבית', 'fees'], ['דמי ניהול', 'fees'], ['דמי כרטיס', 'fees'],
+  ['עמלה', 'fees'], ['עמלות', 'fees'], ['עמלת', 'fees'], ['דמי כרטיס', 'fees'], ['ריבית', 'fees'], ['דמי ניהול', 'fees'],
   ['העברה', 'savings'], ['הפקדה', 'savings'], ['חיסכון', 'savings'], ['קרן השתלמות', 'savings'],
   ['גמל', 'savings'], ['פיקדון', 'savings'], ['ניירות ערך', 'savings'],
-  ['משכורת', 'income'], ['שכר', 'income'], ['ביטוח לאומי', 'income'], ['קצבה', 'income'],
+  ['משכורת', 'income'], ['שכר', 'income'], ['קצבה', 'income'],
   ['משיכה לחשבון הבנק', 'savings'], ['העברה לחשבון', 'savings'], ['העברה בנקאית', 'savings'],
   ['מזונות', 'home'],
-].map(([match, cat], i): Rule => ({ id: 'r' + i, match: match!, cat: cat! }));
+].map(([match, cat, when], i): Rule =>
+  ({ id: 'r' + i, match: match!, cat: cat!, ...(when ? { when: when as 'in' | 'out' } : {}) }));
 
 /* --------------------------------------------------------------- state -- */
 const KEY = 'mazan-habait/v1';
